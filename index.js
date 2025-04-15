@@ -16,7 +16,7 @@ app.get('/auth/login', (req, res) => {
   const redirectUri = process.env.TWITCH_CALLBACK_URL;
   const clientId = process.env.TWITCH_CLIENT_ID;
   const scope = 'channel:read:redemptions channel:manage:redemptions';
-  const authUrl = \`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=\${clientId}&redirect_uri=\${redirectUri}&scope=\${scope}\`;
+  const authUrl = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUri + "&scope=" + scope;
   res.redirect(authUrl);
 });
 
@@ -48,7 +48,7 @@ async function getBroadcasterId() {
   const res = await axios.get('https://api.twitch.tv/helix/users?login=JoanMiii', {
     headers: {
       'Client-ID': process.env.TWITCH_CLIENT_ID,
-      'Authorization': \`Bearer \${userAccessToken}\`
+      'Authorization': 'Bearer ' + userAccessToken
     }
   });
 
@@ -73,7 +73,7 @@ async function setupEventSub() {
   }, {
     headers: {
       'Client-ID': process.env.TWITCH_CLIENT_ID,
-      'Authorization': \`Bearer \${userAccessToken}\`,
+      'Authorization': 'Bearer ' + userAccessToken,
       'Content-Type': 'application/json'
     }
   });
@@ -104,7 +104,7 @@ app.post('/twitch/callback', (req, res) => {
     const { user_name, reward } = req.body.event;
     if (reward.title === process.env.TWITCH_REWARD_NAME) {
       allowedUsers.add(user_name.toLowerCase());
-      console.log(\`🎁 \${user_name} canjeó: \${reward.title}\`);
+      console.log("🎁 " + user_name + " canjeó: " + reward.title);
     }
     res.status(200).end();
   } else {
@@ -118,5 +118,5 @@ app.get('/api/allowed/:username', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(\`🟢 Servidor escuchando en http://localhost:\${port}\`);
+  console.log("🟢 Servidor escuchando en http://localhost:" + port);
 });
